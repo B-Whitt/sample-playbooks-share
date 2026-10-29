@@ -1,0 +1,34 @@
+---
+# Purge a specific Activation by Name
+# The API resolves the name and limits deletion to matching activations.
+- name: Purge a specific Activation by Name
+  hosts: localhost
+  gather_facts: false
+  vars:
+    aap_hostname: "https://example.com"
+    aap_validate_certs: true
+    retention_duration: "P30D"
+    activation_name: "activation-one"  # Replace with an existing activation name.
+
+  tasks:
+    - name: Queue activation log purge
+      ansible.builtin.uri:
+        url: "{{ aap_hostname }}/api/eda/v1/logs/purge/"
+        method: POST
+        status_code: 202
+        body_format: json
+        body:
+          retention_duration: "{{ retention_duration }}"
+          activation_names:
+            - "{{ activation_name }}"
+          audit_trail: true
+        url_username: "{{ aap_username }}"
+        url_password: "{{ aap_password }}"
+        force_basic_auth: true
+        validate_certs: "{{ aap_validate_certs }}"
+      register: purge_response
+      no_log: true
+
+    - name: Report queued purge job
+      ansible.builtin.debug:
+        msg: "EDA activation log purge queued. Job ID: {{ purge_response.json.job_id }}"
