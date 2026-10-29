@@ -1,6 +1,6 @@
 ---
 # Global Purge with retention-duration
-# Delete EDA process logs older than the configured duration, including
+# Delete EDA process logs across all activations older than the configured duration, including
 # previous audit markers and logs without an associated process.
 - name: Global Purge with retention-duration
   hosts: localhost
@@ -8,7 +8,7 @@
   vars:
     aap_hostname: "https://example.com"
     aap_validate_certs: true
-    retention_duration: "P30D"
+    retention_duration: "PT5M"
 
   tasks:
     - name: Queue global log purge
