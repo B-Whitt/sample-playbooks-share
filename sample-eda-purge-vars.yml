@@ -7,5 +7,9 @@ aap_validate_certs: true
 retention_duration: "PT5M"
 
 # Set one of these when running the corresponding playbook:
-# activation_name: "my-activation"
-activation_id: 2
+activation_names: 
+  - "my-activation-1"
+  - "my-activation-2"
+# activation_ids: 
+#   - 2
+#   - 3

@@ -1,5 +1,5 @@
 ---
-# Purge a specific Activation by Name
+# Purge a specific list Activation Names
 # The API resolves the name and limits deletion to matching activations.
 - name: Purge a specific Activation by Name
   hosts: localhost
@@ -7,8 +7,13 @@
   vars:
     aap_hostname: "https://example.com"
     aap_validate_certs: true
-    retention_duration: "P30D"
-    activation_name: "activation-one"  # Replace with an existing activation name.
+    retention_duration: "P30D" # Represents 30 days (ISO 8601 format)
+    
+    # Give list of 1 or more activation names below. This value can be
+    # overridden in extra_vars in the Job Template.
+    activation_names:
+      - "activation-one"
+      - "activation-two"
 
   tasks:
     - name: Queue activation log purge
@@ -19,8 +24,7 @@
         body_format: json
         body:
           retention_duration: "{{ retention_duration }}"
-          activation_names:
-            - "{{ activation_name }}"
+          activation_names: "{{ activation_names }}"
           audit_trail: true
         url_username: "{{ aap_username }}"
         url_password: "{{ aap_password }}"

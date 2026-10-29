@@ -1,14 +1,19 @@
 ---
-# Purge a specific Activation by ID
+# Purge a specific list of Activation IDs
 # Other activations and logs without an associated activation are outside scope.
-- name: Purge a specific Activation by ID
+- name: Purge a specific list of Activation IDs
   hosts: localhost
   gather_facts: false
   vars:
     aap_hostname: "https://example.com"
     aap_validate_certs: true
-    retention_duration: "P30D"
-    activation_id: 1  # Replace with an existing activation ID.
+    retention_duration: "P30D" # Represents 30 days (ISO 8601 format)
+    
+    # Give list of 1 or more activation IDs below. This value can be
+    # overridden in extra_vars in the Job Template.
+    activation_ids: 
+     - 1
+     - 2
 
   tasks:
     - name: Queue activation log purge
@@ -19,8 +24,7 @@
         body_format: json
         body:
           retention_duration: "{{ retention_duration }}"
-          activation_ids:
-            - "{{ activation_id | int }}"
+          activation_ids: {{ activation_ids }}
           audit_trail: true
         url_username: "{{ aap_username }}"
         url_password: "{{ aap_password }}"
