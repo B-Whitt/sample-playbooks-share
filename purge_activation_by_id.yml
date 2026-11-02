@@ -35,7 +35,7 @@
         body_format: json
         body:
           retention_duration: "{{ retention_duration }}"
-          activation_ids: {{ activation_ids }}
+          activation_ids: "{{ activation_ids }}"
           audit_trail: true
         # Token Auth: injected into headers if aap_token is set
         headers: >-
