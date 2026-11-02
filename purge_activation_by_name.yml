@@ -18,7 +18,7 @@
   tasks:
     - name: Queue activation log purge
       ansible.builtin.uri:
-        url: "{{ aap_hostname }}/api/eda/v1/logs/purge/"
+        url: "{{ aap_hostname | regex_replace('/$', '') }}/api/eda/v1/logs/purge/"
         method: POST
         status_code: 202
         body_format: json
@@ -35,4 +35,8 @@
 
     - name: Report queued purge job
       ansible.builtin.debug:
-        msg: "EDA activation log purge queued. Job ID: {{ purge_response.json.job_id }}"
+        msg:
+          - "EDA activation log purge queued."
+          - "Job ID: {{ purge_response.json.job_id }}"
+          - "Retention duration: {{ retention_duration }}"
+          - "Activation names: {{ activation_names | join(', ') }}"
